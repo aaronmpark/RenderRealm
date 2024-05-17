@@ -42,7 +42,7 @@ initial.forEach(initials => {
   cylinder.position.y = initials.positionY;
   cylinder.position.z = initials.positionZ;
 });
-camera.position.z = 20;
+camera.position.z = 30;
 
 
 
@@ -51,6 +51,8 @@ const positions = [];
 function isPositionClose(newX, newY, threshold) {
   for (let pos of positions) {
     let d = Math.sqrt((pos.x - newX) ** 2 + (pos.y - newY) ** 2);
+    // console.log(`Generated Distance: ${d}`); // Log newX and newY
+    // console.log(`Generated threshold: ${threshold}`); // Log newX and newY
     if (d < threshold) {
       return true; // Position is too close to an existing one
     }
@@ -69,44 +71,85 @@ const adjustments = [
 ];
 
 adjustments.forEach(adjustment => {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 15; i++) {
     // fine tune the numbers later because lowkey want it to be closer to the middle a little bit
-    let newX = adjustment.positionX + (Math.random() * (i / 12));
-    let newY = adjustment.positionY + (Math.random() * (i / 12));
-    let newZ = -5 + (Math.random() * 2);
-    console.log(`Generated newX: ${newX}, newY: ${newY}`); // Log newX and newY
+    let newX = 0;
+    let newY = 0;
+    let newZ = -5 + (Math.random() * 13);
+    
+    if (adjustment.positionX < 0){
+      newX = adjustment.positionX + (Math.random() * (i / 22));
+    }
+    else{
+      newX = adjustment.positionX - (Math.random() * (i / 22));
+    }  
+    if (adjustment.positionY < 0){
+      newY = adjustment.positionY + (Math.random() * (i / 22));
+    }
+    else{
+      newY = adjustment.positionY - (Math.random() * (i / 22));
+    }  
+
+    // console.log(`Generated newX: ${newX}, newY: ${newY}`); // Log newX and newY
 
     // doesn't spawn in the middle (fine tune the numbers later)
-    // if (isPositionClose(0, 0, 0.1)) {
-    //   continue;
-    // }
+    if (newX == 0 || newY == 0){
+      console.log("zero");
+      continue;
+    }
 
-    if (!isPositionClose(newX, newY, 0.1)) {
+    // write a better not spawn in middle code here
+
+    // if arent close to each other by diameter length (0.062 with margin of error) -> adds the jauntson
+    if (!isPositionClose(newX, newY, 0.062)) {
       const temp = new THREE.Mesh(geometry, material);
       scene.add(temp);
       temp.rotation.x = adjustment.rotationX;
       temp.position.x = newX;
       temp.position.y = newY;
       temp.position.z = newZ;
+      console.log("normal situation");
       positions.push({ x: newX, y: newY });
-    } else {
-      console.log("Position too close, adjusting or skipping...");
-      // change the position to another random position and check for position close until not close anymore  
-      let tempX = adjustment.positionX - (Math.random() * (i / 12));
-      let tempY = adjustment.positionY + (Math.random() * (i / 12));
-      console.log(`Generated tempX BEFORE : ${tempX}, tempY  BEFORE : ${tempY}`); // Log tempX and tempY
-      while (isPositionClose(tempX, tempY, 0.04)) {
-        tempX = adjustment.positionX - (Math.random() * (i / 10));
-        tempY = adjustment.positionY + (Math.random() * (i / 10));
-        console.log(`Generated tempX: ${tempX}, tempY: ${tempY}`); // Log tempX and tempY
+      continue; // just in case lol
+    } 
+    
+    // if they are too close, then we need to adjust their values!
+    else {
+      // console.log(`Generated tempX BEFORE : ${newX}, tempY  BEFORE : ${newY}`); // Log tempX and tempY
+
+      // change their values by a different Math.random() value for each moment of it being close...
+
+      // just gonna randomize it again until it is no longer close i think (?)
+
+      let attempts = 0;
+      const maxAttempts = 10;
+      while (isPositionClose(newX, newY, 0.062) && attempts < maxAttempts) {
+        if (adjustment.positionX < 0){
+          newX = adjustment.positionX + (Math.random() * (i / 22));
+        }
+        else{
+          newX = adjustment.positionX - (Math.random() * (i / 22));
+        }  
+        if (adjustment.positionY < 0){
+          newY = adjustment.positionY + (Math.random() * (i / 22));
+        }
+        else{
+          newY = adjustment.positionY - (Math.random() * (i / 22));
+        }  
+        attempts++;
+        if (attempts >= maxAttempts) {
+          console.log("Could not find a suitable position");
+          break;
+        }
       }
       const temp = new THREE.Mesh(geometry, material);
       scene.add(temp);
       temp.rotation.x = adjustment.rotationX;
-      temp.position.x = tempX;
-      temp.position.y = tempY;
+      temp.position.x = newX;
+      temp.position.y = newY;
       temp.position.z = newZ;
-      positions.push({ x: tempX, y: tempY });
+      // console.log("worked!");
+      positions.push({ x: newX, y: newY });
     }
   }
 });
