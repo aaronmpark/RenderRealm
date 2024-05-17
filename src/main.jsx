@@ -12,11 +12,21 @@ document.body.appendChild(renderer.domElement); // how the thing actually render
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 // Materials
-const material = new THREE.MeshBasicMaterial({ color: 0x00fff00, wireframe: true }); // green sides
+const material = new THREE.MeshBasicMaterial({ color: 0x00fff00, wireframe: false }); // green sides
 
 // Geometry
 // 3rd one is height
 const geometry = new THREE.CylinderGeometry(0.03, 0.03, 1, 64, 1, false);
+
+// FAKE THING FOR TESTING RN
+const material2 =  new THREE.MeshBasicMaterial({ color: 0xffffffff, wireframe: false }); // green sides
+const fake = new THREE.Mesh(geometry, material2);
+scene.add(fake);
+fake.rotation.x = 3.14/2
+fake.position.x = 0.2;
+fake.position.y = 0;
+fake.position.z = 25;
+
 
 // add more and change the heights/positionZ mainly
 const initial = [
@@ -60,6 +70,16 @@ function isPositionClose(newX, newY, threshold) {
   return false; // Position is fine
 }
 
+function isMiddle(newX, newY, threshold) {
+    let d = Math.sqrt((newX - 0) ** 2 + (newY - 0) ** 2);
+    if (d < threshold) {
+      return true; // Position is too close to an existing one
+    }
+  return false; // Position is fine
+}
+
+
+
 // change some of the positionZs and the heights of them to make it better
 const adjustments = [
   { rotationX: 3.14 / 2, positionX: 0.3, positionY: 0.2 },
@@ -99,6 +119,11 @@ adjustments.forEach(adjustment => {
     }
 
     // write a better not spawn in middle code here
+    if (isMiddle(newX, newY, 0.18)){
+      console.log("MIDDLE");
+      console.log(`Generated MIDDLE : ${newX}, tempY  : ${newY}`); // Log tempX and tempY
+      continue;
+    }
 
     // if arent close to each other by diameter length (0.062 with margin of error) -> adds the jauntson
     if (!isPositionClose(newX, newY, 0.062)) {
@@ -142,6 +167,12 @@ adjustments.forEach(adjustment => {
           break;
         }
       }
+
+      if (isMiddle(newX, newY, 0.18)){
+        console.log("MIDDLE");
+        console.log(`Generated MIDDLE : ${newX}, tempY  : ${newY}`); // Log tempX and tempY
+        continue;
+      }
       const temp = new THREE.Mesh(geometry, material);
       scene.add(temp);
       temp.rotation.x = adjustment.rotationX;
@@ -158,7 +189,7 @@ adjustments.forEach(adjustment => {
 function animate() {
   requestAnimationFrame(animate);
 
-  camera.position.z -= 0.1;
+  camera.position.z -= 0.05;
 
   renderer.render(scene, camera);
 }
