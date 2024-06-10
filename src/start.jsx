@@ -59,28 +59,34 @@ loader.load('StandingDesk.glb', (glb) => {
 })
 
 loader.load('CompDesk.glb', (glb) => {
-    const mesh2 = glb.scene;
-    mesh2.position.set(-.2, 1.4, 0);
-    mesh2.scale.set(.003,.003,.003);
-    scene.add(mesh2);
+    const mesh = glb.scene;
+    mesh.position.set(-.2, 1.4, 0);
+    mesh.scale.set(.003,.003,.003);
+    mesh.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+    scene.add(mesh);
 })
 
 loader.load('HangingLantern.glb', (glb) => {
-    const mesh2 = glb.scene;
-    mesh2.position.set(0, 7, 0);
-    scene.add(mesh2);
+    const mesh = glb.scene;
+    mesh.position.set(0, 7, 0);
+    scene.add(mesh);
 })
 
 loader.load('chain.glb', (glb) => {
-    const mesh2 = glb.scene;
-    mesh2.position.set(0, 9.5, 0);
-    mesh2.scale.set(1.75,5,1.75);
-    scene.add(mesh2);
+    const mesh = glb.scene;
+    mesh.position.set(0, 9.5, 0);
+    mesh.scale.set(1.75,5,1.75);
+    scene.add(mesh);
 })
 
-const lanternLight = new THREE.PointLight(0xffffff, 50, 9);
+const lanternLight = new THREE.PointLight(0xfffffff, 50, 9);
 lanternLight.position.set(0, 4, 0);
-lanternLight.castShadow = true;
+
 scene.add(lanternLight);
 
 
