@@ -15,6 +15,11 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerH
 camera.position.set(4,5,11);
 camera.lookAt(0,0,0);
 
+// Raycaster and mouse vector
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let clickableClicked = false;
+
 // Ground materials
 const groundGeo = new THREE.PlaneGeometry(20,20,32,32);
 groundGeo.rotateX(-Math.PI / 2);
@@ -95,6 +100,7 @@ interactor.visible = false;
 scene.add(interactor);
 
 //Controls so you can move around the page
+
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enableDamping = true;
 controls.enablePan = false;
@@ -104,11 +110,57 @@ controls.minPolarAngle = 0.5;
 controls.maxPolarAngle = 1.5;
 controls.autoRotate = false;
 controls.target = new THREE.Vector3(0, 1.75, 0);
-controls.update();
 
+// Event listener for mouse click
+// wow this works LOL...
+// link this so that it maybe does something within animate() to tthen zoom into the screen until a certain point?
+// once zoomed at the point, do something
+function onMouseClick(event) {
+    event.preventDefault();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects([interactor]);
+
+    if (intersects.length > 0 && !clickableClicked) {
+        clickableClicked = true;
+        console.log('Clickable object clicked!', clickableClicked);
+    }
+}
+
+window.addEventListener('click', onMouseClick, false);
+
+function adjustScreen(){
+
+  //TODO:
+  // get the camera (controls thing) to look at the screen
+  // ^^ done by resetting the camera thing maybe
+  // make sure it cant be clicked from the back (block)
+  // create another block / thing that would "appear" when that boolean is set
+  // when the boolean is set -> block is there and can be clicked on to set boolean to false and go back out to OG page
+
+  controls.enabled = false;
+  if (camera.position.z > 1.5){
+    camera.position.z -= 0.1;
+  }
+  if (camera.position.y > 2){
+    camera.position.y -= 0.1;
+  }
+}
 
 function animate() {
     requestAnimationFrame(animate);
+
+
+      if (clickableClicked) {
+        adjustScreen();
+    } 
+    else {
+        controls.update();
+    }
     renderer.render(scene, camera);
 }
 
@@ -126,3 +178,17 @@ animate();
 
 // on side if i want to -> change the model of the PC to something that i personally model -> for future
 // personally model my current keyboard -> for like for fun to show i know how to use things like blender ? 
+
+
+
+// START SIMULATION ON MIDDLE OF SCREEN
+// when press button -> zoom in to the jaunt and make screen WHITE and then load next page -> white SAO transition awesome cleanness awesomeness yea
+
+
+// USE OBJECT CREATED -> FIND A WAY TO SET A BOOLEAN WHEN CLICKED ON THE SCREEN... WHEN CLICKED AND PRESS THE SIMULATION BUTTOn, SET OTHER BOOLEANS AND SET USESTATE VARIABLE AS TRUE
+// SO ON THE OTHER PAGE, IT WILL KNOW TO DO THE ZOOM
+
+// also have another function when zoomed into the pc, that u can zoom back out 
+
+
+// make the light flicker
