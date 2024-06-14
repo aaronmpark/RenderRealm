@@ -6,7 +6,7 @@ const scene = new THREE.Scene(); // creates the scene (NEEDED think like just sc
 
 const renderer = new THREE.WebGLRenderer(); // how it renders onto the  screen
 renderer.setSize(window.innerWidth, window.innerHeight); // sets the size of the render/
-renderer.setClearColor(0xffffff, 1); //turns the background white
+renderer.setClearColor(0x000000, 1); //turns the background white
 document.body.appendChild(renderer.domElement); // how the thing actually renders it i think ?
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);

@@ -90,8 +90,8 @@ lanternLight.position.set(0, 4, 0);
 scene.add(lanternLight);
 
 //Screen in the middle of Monitor
-const interGeometry = new THREE.BoxGeometry(1.1, .6, .08);
-const interMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+const interGeometry = new THREE.BoxGeometry(1.1, .6, .02);
+const interMaterial = new THREE.MeshStandardMaterial({ color: 0xffffd2 });
 const interactor = new THREE.Mesh(interGeometry, interMaterial);
 interactor.position.set(-.2, 1.9, 0); // Match the lantern's position
 interactor.castShadow = false;
@@ -99,8 +99,14 @@ interactor.receiveShadow = false;
 interactor.visible = false;
 scene.add(interactor);
 
-//Controls so you can move around the page
+// start Button for the Monitor
+// find a model to use
+// do same thing done with interactor, and change the onMouseClick() function to take in the other jaunt with the intersection
+// have some sort of if statement to check for IF the camera is zoomed in,
+// if the camera is zoomed in, allow for the intersection checker to even start checking for if the guy pressed DA BUTTON
+// if press button, do some jauntations boolean stuff other jaunts 
 
+//Controls so you can move around the page
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enableDamping = true;
 controls.enablePan = false;
@@ -112,9 +118,6 @@ controls.autoRotate = false;
 controls.target = new THREE.Vector3(0, 1.75, 0);
 
 // Event listener for mouse click
-// wow this works LOL...
-// link this so that it maybe does something within animate() to tthen zoom into the screen until a certain point?
-// once zoomed at the point, do something
 function onMouseClick(event) {
     event.preventDefault();
 
@@ -125,7 +128,7 @@ function onMouseClick(event) {
 
     const intersects = raycaster.intersectObjects([interactor]);
 
-    if (intersects.length > 0 && !clickableClicked) {
+    if (intersects.length > 0 && !clickableClicked && (camera.position.z > 1.5)) {
         clickableClicked = true;
         console.log('Clickable object clicked!', clickableClicked);
     }
@@ -134,21 +137,20 @@ function onMouseClick(event) {
 window.addEventListener('click', onMouseClick, false);
 
 function adjustScreen(){
-
-  //TODO:
-  // get the camera (controls thing) to look at the screen
-  // ^^ done by resetting the camera thing maybe
-  // make sure it cant be clicked from the back (block)
-  // create another block / thing that would "appear" when that boolean is set
-  // when the boolean is set -> block is there and can be clicked on to set boolean to false and go back out to OG page
-
   controls.enabled = false;
   if (camera.position.z > 1.5){
-    camera.position.z -= 0.1;
+    camera.position.z -= 0.05;
   }
   if (camera.position.y > 2){
-    camera.position.y -= 0.1;
+    camera.position.y -= 0.05;
   }
+  if (camera.position.x > -.1){
+    camera.position.x -= 0.05;
+  }
+  if (camera.position.x < -.1){
+    camera.position.x += 0.05;
+  }
+  camera.lookAt(-.1,1.85,0);
 }
 
 function animate() {
@@ -167,28 +169,23 @@ function animate() {
 animate();
 
 
-
-//when click on the middle of the screen (create object that can be clicked on ?)
-// set camera position forwards within the animate (check ffor a boolean/ something) 
-// if boolean true or whatever then camera moves forwards, and just go towards the screen
 // then make it look directly mainly on screen 
 // show other object of screen thing maybe
 // click again to go to SAO page
 
-
 // on side if i want to -> change the model of the PC to something that i personally model -> for future
 // personally model my current keyboard -> for like for fun to show i know how to use things like blender ? 
-
-
 
 // START SIMULATION ON MIDDLE OF SCREEN
 // when press button -> zoom in to the jaunt and make screen WHITE and then load next page -> white SAO transition awesome cleanness awesomeness yea
 
-
 // USE OBJECT CREATED -> FIND A WAY TO SET A BOOLEAN WHEN CLICKED ON THE SCREEN... WHEN CLICKED AND PRESS THE SIMULATION BUTTOn, SET OTHER BOOLEANS AND SET USESTATE VARIABLE AS TRUE
 // SO ON THE OTHER PAGE, IT WILL KNOW TO DO THE ZOOM
 
-// also have another function when zoomed into the pc, that u can zoom back out 
+// TODO NOW:
+// create a "simulation start screen for the computer screen"
+// add another small "press button" -> to redirect to the next page
+// with the new press button -> when they press it, it zooms the camera FURTHER into the monitor
+// after it gets to a certain point + something with colors -> goes to sao part
 
-
-// make the light flicker
+// then add light flickering
