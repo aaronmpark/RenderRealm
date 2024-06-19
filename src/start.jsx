@@ -12,13 +12,14 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.set(4,5,11);
+camera.position.set(2,6,10);
 camera.lookAt(0,0,0);
 
 // Raycaster and mouse vector
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let clickableClicked = false;
+let buttonPressed = false;
 
 // Ground materials
 const groundGeo = new THREE.PlaneGeometry(20,20,32,32);
@@ -90,10 +91,10 @@ lanternLight.position.set(0, 4, 0);
 scene.add(lanternLight);
 
 //Screen in the middle of Monitor
-const interGeometry = new THREE.BoxGeometry(1.1, .6, .02);
-const interMaterial = new THREE.MeshStandardMaterial({ color: 0xffffd2 });
+const interGeometry = new THREE.BoxGeometry(1.1, .7, .02);
+const interMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 const interactor = new THREE.Mesh(interGeometry, interMaterial);
-interactor.position.set(-.2, 1.9, 0); // Match the lantern's position
+interactor.position.set(-.2, 1.9, 0);
 interactor.castShadow = false;
 interactor.receiveShadow = false;
 interactor.visible = false;
@@ -105,6 +106,13 @@ scene.add(interactor);
 // have some sort of if statement to check for IF the camera is zoomed in,
 // if the camera is zoomed in, allow for the intersection checker to even start checking for if the guy pressed DA BUTTON
 // if press button, do some jauntations boolean stuff other jaunts 
+
+const buttonGeometry = new THREE.BoxGeometry(.5, .1, .02);
+const button = new THREE.Mesh(buttonGeometry, interMaterial);
+button.position.set(-.2, 1.8, 0);
+button.castShadow = false;
+button.receiveShadow = false;
+scene.add(button);
 
 //Controls so you can move around the page
 const controls = new OrbitControls( camera, renderer.domElement );
@@ -124,7 +132,7 @@ function onMouseClick(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, camera); 
 
     const intersects = raycaster.intersectObjects([interactor]);
 
@@ -132,9 +140,24 @@ function onMouseClick(event) {
         clickableClicked = true;
         console.log('Clickable object clicked!', clickableClicked);
     }
+
+    const buttonIntersect = raycaster.intersectObjects([button]);
+    const targetPosition = new THREE.Vector3(-.1,2,1.5);
+    const tolerance = 0.05;
+    if (buttonIntersect.length > 0 && clickableClicked && (Math.abs(camera.position.x - targetPosition.x) < tolerance &&
+    Math.abs(camera.position.y - targetPosition.y) < tolerance &&
+    Math.abs(camera.position.z - targetPosition.z) < tolerance)) {
+      console.log("Button pressed");
+      buttonPressed = true;
+    }
 }
 
 window.addEventListener('click', onMouseClick, false);
+
+function zoomScreen(){
+  camera.position.z -= 0.01;
+}
+
 
 function adjustScreen(){
   controls.enabled = false;
@@ -150,14 +173,17 @@ function adjustScreen(){
   if (camera.position.x < -.1){
     camera.position.x += 0.05;
   }
+
   camera.lookAt(-.1,1.85,0);
 }
 
 function animate() {
     requestAnimationFrame(animate);
 
-
-      if (clickableClicked) {
+    if (buttonPressed) {
+      zoomScreen();
+    }
+    else if (clickableClicked && !buttonPressed) {
         adjustScreen();
     } 
     else {
@@ -189,3 +215,14 @@ animate();
 // after it gets to a certain point + something with colors -> goes to sao part
 
 // then add light flickering
+
+// steps:
+// create an object (shows on the middle of the screen thing) -> only allow it to be pressed on when the boolean of the zoom is already in
+// when the zoom is there, block can be clicked on -> (boolean only done ONCE the thing is FUUUULLY zoomed in)
+// the block will then zoom into the screen (white screen?) -> and then switch over to the next sao screen once it is zoomed in there too
+
+
+// some of the interaction stuff is clunky -> work around some of the sizes of the boxes
+// have an object created -> and have the "zoom in" effect
+// need to make it so that it doesn't no-clip into the screen
+// and rather go into a WHITE screen? or black screen idk
