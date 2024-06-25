@@ -43,33 +43,36 @@ spotLight.shadow.bias = -0.0001;
 scene.add(spotLight);
 
 //Loaders for the GLB files
-const loader = new GLTFLoader().setPath('public/');
+const loader = new GLTFLoader().setPath('public/models/');
+
+let desk;
 loader.load('StandingDesk.glb', (glb) => {
-    const mesh = glb.scene;
-    mesh.position.set(0,.55, 0);
-    mesh.scale.set(2,1.5,2.5);
+    desk = glb.scene;
+    desk.position.set(0,.55, 0);
+    desk.scale.set(2,1.5,2.5);
     
-    mesh.traverse((child) => {
+    desk.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
         }
       });
 
-    scene.add(mesh);
+    scene.add(desk);
 })
 
+let comp;
 loader.load('CompDesk.glb', (glb) => {
-    const mesh = glb.scene;
-    mesh.position.set(-.2, 1.4, 0);
-    mesh.scale.set(.003,.003,.003);
-    mesh.traverse((child) => {
+    comp = glb.scene;
+    comp.position.set(-.2, 1.4, 0);
+    comp.scale.set(.003,.003,.003);
+    comp.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
         }
       });
-    scene.add(mesh);
+    scene.add(comp);
 })
 
 loader.load('HangingLantern.glb', (glb) => {
@@ -101,18 +104,17 @@ interactor.visible = false;
 scene.add(interactor);
 
 // start Button for the Monitor
-// find a model to use
-// do same thing done with interactor, and change the onMouseClick() function to take in the other jaunt with the intersection
-// have some sort of if statement to check for IF the camera is zoomed in,
-// if the camera is zoomed in, allow for the intersection checker to even start checking for if the guy pressed DA BUTTON
-// if press button, do some jauntations boolean stuff other jaunts 
-
-const buttonGeometry = new THREE.BoxGeometry(.5, .1, .02);
+const buttonGeometry = new THREE.BoxGeometry(1.1, .7, .02);
 const button = new THREE.Mesh(buttonGeometry, interMaterial);
-button.position.set(-.2, 1.8, 0);
-button.castShadow = false;
-button.receiveShadow = false;
+button.position.set(-.2, 1.9, 0);
+button.visible = false;
 scene.add(button);
+
+const screenLight = new THREE.PointLight(0xffffff, 20, 1);
+screenLight.position.set(-.2,1.9,0);
+screenLight.visible = false;
+scene.add(screenLight);
+
 
 //Controls so you can move around the page
 const controls = new OrbitControls( camera, renderer.domElement );
@@ -125,6 +127,10 @@ controls.maxPolarAngle = 1.5;
 controls.autoRotate = false;
 controls.target = new THREE.Vector3(0, 1.75, 0);
 
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Event listener for mouse click
 function onMouseClick(event) {
     event.preventDefault();
@@ -136,55 +142,74 @@ function onMouseClick(event) {
 
     const intersects = raycaster.intersectObjects([interactor]);
 
-    if (intersects.length > 0 && !clickableClicked && (camera.position.z > 1.5)) {
+    if (intersects.length > 0 && !clickableClicked && (camera.position.z > 2.8)) {
         clickableClicked = true;
         console.log('Clickable object clicked!', clickableClicked);
-    }
-
-    const buttonIntersect = raycaster.intersectObjects([button]);
-    const targetPosition = new THREE.Vector3(-.1,2,1.5);
-    const tolerance = 0.05;
-    if (buttonIntersect.length > 0 && clickableClicked && (Math.abs(camera.position.x - targetPosition.x) < tolerance &&
-    Math.abs(camera.position.y - targetPosition.y) < tolerance &&
-    Math.abs(camera.position.z - targetPosition.z) < tolerance)) {
-      console.log("Button pressed");
-      buttonPressed = true;
     }
 }
 
 window.addEventListener('click', onMouseClick, false);
 
-function zoomScreen(){
-  camera.position.z -= 0.01;
+async function zoomScreen(){
+  await wait(500);
+  loader.load('monitorScreen.glb', (glb) => {
+    const mesh = glb.scene;
+    mesh.position.set(-.418, 1.167, .44);
+    mesh.scale.set(.985,.85,1);
+    scene.add(mesh);
+  })
+  screenLight.visible = true;
+  await wait(1000);
+  camera.position.z -= .08;
+  await wait(150);
+  comp.visible = false;
+  desk.visible = false;
+  renderer.setClearColor(0xffffff);
+  groundMesh.visible = false;
 }
 
 
 function adjustScreen(){
   controls.enabled = false;
-  if (camera.position.z > 1.5){
+  if (camera.position.z > 2.8){
     camera.position.z -= 0.05;
   }
-  if (camera.position.y > 2){
+  if (camera.position.y > 1.9){
     camera.position.y -= 0.05;
   }
-  if (camera.position.x > -.1){
+  if (camera.position.x > -.2){
     camera.position.x -= 0.05;
   }
-  if (camera.position.x < -.1){
+  if (camera.position.x < -.2){
     camera.position.x += 0.05;
   }
 
-  camera.lookAt(-.1,1.85,0);
+  camera.lookAt(-.2,1.9,0);
 }
+
+function checkPosition(){
+  const targetPosition = new THREE.Vector3(-.2,1.9,2.8);
+  const tolerance = 0.05;
+  if (clickableClicked && (Math.abs(camera.position.x - targetPosition.x) < tolerance &&
+  Math.abs(camera.position.y - targetPosition.y) < tolerance &&
+  Math.abs(camera.position.z - targetPosition.z) < tolerance)) {
+    console.log("Camera at Position!");
+    buttonPressed = true;
+  }
+}
+
 
 function animate() {
     requestAnimationFrame(animate);
+    
+    checkPosition();
 
     if (buttonPressed) {
       zoomScreen();
     }
     else if (clickableClicked && !buttonPressed) {
         adjustScreen();
+        console.log("ADJUSTING");
     } 
     else {
         controls.update();
@@ -226,3 +251,12 @@ animate();
 // have an object created -> and have the "zoom in" effect
 // need to make it so that it doesn't no-clip into the screen
 // and rather go into a WHITE screen? or black screen idk
+
+
+// todo NOW!!!
+// move the camera back a lil bit of z axis
+// when click on button, zoom in QUICK
+// go to black and transition maybe other camera location
+// boom
+
+// possibly remove the 2nd button activation -> rather just do once it is zoomed in, wait a second or two, then turn the screen white (computer), then zooom in fast
