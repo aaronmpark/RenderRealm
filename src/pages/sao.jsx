@@ -1,8 +1,9 @@
+import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 
-export function Transition(){
-
+export function Transition({ setTransitioned }){
+  useEffect(() => {
   VRButton.createButton();
   const scene = new THREE.Scene(); // creates the scene (NEEDED think like just scene that u will switch on to.)
   
@@ -131,14 +132,14 @@ export function Transition(){
   
       // doesn't spawn in the middle (fine tune the numbers later)
       if (newX == 0 || newY == 0){
-        console.log("zero");
+        //console.log("zero");
         continue;
       }
   
       // write a better not spawn in middle code here
       if (isMiddle(newX, newY, 0.18)){
-        console.log("MIDDLE");
-        console.log(`Generated MIDDLE : ${newX}, tempY  : ${newY}`); // Log tempX and tempY
+        //console.log("MIDDLE");
+        //console.log(`Generated MIDDLE : ${newX}, tempY  : ${newY}`); // Log tempX and tempY
         continue;
       }
   
@@ -152,7 +153,7 @@ export function Transition(){
         temp.position.x = newX;
         temp.position.y = newY;
         temp.position.z = newZ;
-        console.log("normal situation");
+        //console.log("normal situation");
         positions.push({ x: newX, y: newY });
         continue; // just in case lol
       } 
@@ -182,14 +183,14 @@ export function Transition(){
           }  
           attempts++;
           if (attempts >= maxAttempts) {
-            console.log("Could not find a suitable position");
+            //console.log("Could not find a suitable position");
             break;
           }
         }
   
         if (isMiddle(newX, newY, 0.18)){
-          console.log("MIDDLE");
-          console.log(`Generated MIDDLE : ${newX}, tempY  : ${newY}`); // Log tempX and tempY
+          //console.log("MIDDLE");
+          //console.log(`Generated MIDDLE : ${newX}, tempY  : ${newY}`); // Log tempX and tempY
           continue;
         }
         const color = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
@@ -206,14 +207,22 @@ export function Transition(){
     }
   });
   
+  function checkPosition(){
+    if (camera.position.z < -17){
+      setTransitioned(true);
+    }
+  }
+
   // Create an animation loop
   function animate() {
     requestAnimationFrame(animate);
   
+    checkPosition();
     camera.position.z -= 0.1;
   
     renderer.render(scene, camera);
   }
   
   animate();
+}, [setTransitioned]);
 }
