@@ -12,6 +12,11 @@ import { Resources } from '../components/StartComponents/Resources';
 export function Start({ setZoomed }) {
   useEffect(() => {
     const renderer = new Renderer().getRenderer();
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
     const scene = new Scene().getScene();
     const camera = new Camera().getCamera();
 
@@ -30,7 +35,7 @@ export function Start({ setZoomed }) {
     const groundMesh = resources.getGround();
     const interactor = resources.getInteractor();
 
-    const loader = new GLTFLoader().setPath('public/models/');
+    const loader = new GLTFLoader().setPath('src/assets/models/');
     let desk, comp, monitor;
 
     const loadModels = () => {

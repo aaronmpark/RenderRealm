@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Start } from './pages/start';
-import { Transition } from './pages/sao';
+import { Transition } from './pages/transition';
 import { Portfolio } from './pages/portfolio';
 import { ZoomProvider, ZoomContext } from './components/ZoomContext';
 import { TransitionProvider, TransitionContext } from './components/TransitionContext';
