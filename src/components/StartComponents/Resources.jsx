@@ -35,6 +35,7 @@ export class Resources {
     this.button.visible = false;
     scene.add(this.button);
   }
+  
 
     getGround() {
       return this.groundMesh;

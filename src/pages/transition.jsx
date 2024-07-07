@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import { Renderer } from '../components/StartComponents/Renderer';
@@ -6,12 +6,14 @@ import { Scene } from '../components/StartComponents/Scene';
 import { Camera } from '../components/StartComponents/Camera';
 
 export function Transition({ setTransitioned }){
+  const mountRef = useRef(null);
   useEffect(() => {
   VRButton.createButton();
 
   const scene = new Scene().getScene();
   const renderer = new Renderer().getRenderer();
   renderer.setClearColor(0xffffff); //turns the background white
+  mountRef.current.appendChild(renderer.domElement);
   const camera = new Camera().getCamera();
   camera.position.z = 30;
 
@@ -179,5 +181,40 @@ export function Transition({ setTransitioned }){
   }
   
   animate();
-}, [setTransitioned]);
+      return () => {
+      // Dispose of geometries, materials, and textures
+      scene.traverse((object) => {
+        if (object.isMesh) {
+          object.geometry.dispose();
+          if (object.material.isMaterial) {
+            cleanMaterial(object.material);
+          } else {
+            // If it's an array of materials
+            for (const material of object.material) cleanMaterial(material);
+          }
+        }
+      });
+
+      // Clean up renderer
+      renderer.dispose();
+
+      // Remove renderer's DOM element
+      if (renderer.domElement.parentNode) {
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
+    };
+
+    function cleanMaterial(material) {
+      material.dispose();
+
+      // Dispose of textures
+      for (const key in material) {
+        const value = material[key];
+        if (value && typeof value === 'object' && 'minFilter' in value) {
+          value.dispose();
+        }
+      }
+    }
+  }, [setTransitioned]);
+  return <div ref={mountRef} />;
 }

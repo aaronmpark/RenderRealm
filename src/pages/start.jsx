@@ -1,5 +1,5 @@
 // src/pages/start.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Renderer } from '../components/StartComponents/Renderer';
@@ -10,13 +10,14 @@ import { Controls } from '../components/StartComponents/Controls';
 import { Resources } from '../components/StartComponents/Resources';
 
 export function Start({ setZoomed }) {
+  const mountRef = useRef(null);
   useEffect(() => {
     const renderer = new Renderer().getRenderer();
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
+    mountRef.current.appendChild(renderer.domElement);
     const scene = new Scene().getScene();
     const camera = new Camera().getCamera();
 
@@ -163,9 +164,41 @@ export function Start({ setZoomed }) {
 
     return () => {
       window.removeEventListener('click', onMouseClick);
-      document.body.removeChild(renderer.domElement);
+
+      // Dispose of geometries, materials, and textures
+      scene.traverse((object) => {
+        if (object.isMesh) {
+          object.geometry.dispose();
+          if (object.material.isMaterial) {
+            cleanMaterial(object.material);
+          } else {
+            // If it's an array of materials
+            for (const material of object.material) cleanMaterial(material);
+          }
+        }
+      });
+
+      // Clean up renderer
+      renderer.dispose();
+
+      // Remove renderer's DOM element
+      if (renderer.domElement.parentNode) {
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
     };
+
+    function cleanMaterial(material) {
+      material.dispose();
+
+      // Dispose of textures
+      for (const key in material) {
+        const value = material[key];
+        if (value && typeof value === 'object' && 'minFilter' in value) {
+          value.dispose();
+        }
+      }
+    }
   }, [setZoomed]);
 
-  return null;
+  return <div ref={mountRef} />;
 }

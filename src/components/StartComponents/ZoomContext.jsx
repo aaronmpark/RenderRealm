@@ -1,4 +1,3 @@
-// src/ZoomContext.js
 import React, { createContext, useState } from 'react';
 
 export const ZoomContext = createContext();
