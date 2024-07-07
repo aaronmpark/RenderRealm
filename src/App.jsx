@@ -1,6 +1,4 @@
-// src/App.jsx
-import React, { useContext, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import { Start } from './pages/start';
 import { Transition } from './pages/sao';
 import { Portfolio } from './pages/portfolio';
@@ -9,34 +7,45 @@ import { TransitionProvider, TransitionContext } from './components/TransitionCo
 
 function App() {
   const { zoomed, setZoomed } = useContext(ZoomContext);
-  const {transitioned, setTransitioned} = useContext(TransitionContext);
-  const navigate = useNavigate();
+  const { transitioned, setTransitioned } = useContext(TransitionContext);
+  const [currentPage, setCurrentPage] = useState('start');
 
   useEffect(() => {
     if (zoomed) {
-      navigate('/transition');
+      setCurrentPage('transition');
     }
-  }, [zoomed, navigate]);
+  }, [zoomed]);
 
   useEffect(() => {
     if (transitioned) {
-      navigate('/portfolio');
+      setCurrentPage('portfolio');
     }
-  }, [transitioned, navigate]);
+  }, [transitioned]);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'start':
+        return <Start setZoomed={setZoomed} />;
+      case 'transition':
+        return <Transition setTransitioned={setTransitioned} />;
+      case 'portfolio':
+        return <Portfolio />;
+      default:
+        return <Start setZoomed={setZoomed} />;
+    }
+  };
 
   return (
-    <Routes>
-      <Route path="/" element={<Start setZoomed={setZoomed} />} />
-      <Route path="/transition" element={<Transition setTransitioned={setTransitioned} />} />
-      <Route path="/portfolio" element={<Portfolio />} />
-    </Routes>
+    <div>
+      {renderPage()}
+    </div>
   );
 }
 
 const Root = () => (
   <ZoomProvider>
-      <TransitionProvider>
-    <App />
+    <TransitionProvider>
+      <App />
     </TransitionProvider>
   </ZoomProvider>
 );
