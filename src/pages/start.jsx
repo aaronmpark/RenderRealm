@@ -2,12 +2,12 @@
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Renderer } from '../components/StartComp/Renderer';
-import { Scene } from '../components/StartComp/Scene';
-import { Camera } from '../components/StartComp/Camera';
-import { Lights } from '../components/StartComp/Lights';
-import { Controls } from '../components/StartComp/Controls';
-import { Resources } from '../components/StartComp/Resources';
+import { Renderer } from '../components/StartComponents/Renderer';
+import { Scene } from '../components/StartComponents/Scene';
+import { Camera } from '../components/StartComponents/Camera';
+import { Lights } from '../components/StartComponents/Lights';
+import { Controls } from '../components/StartComponents/Controls';
+import { Resources } from '../components/StartComponents/Resources';
 
 export function Start({ setZoomed }) {
   useEffect(() => {
