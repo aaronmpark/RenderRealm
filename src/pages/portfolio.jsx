@@ -85,3 +85,24 @@ export function Portfolio() {
 
   return <div ref={mountRef} />;
 }
+
+
+
+
+/*
+TODO:
+fix the cleanup functions -> maybe turn into another component
+add audio to the pages -> later
+maybe make it so that once u are on the actual portfolio page -> when u refresh, it refreshes to the portfolio page?
+^^^ can do so by IMO making this page into ANOTHER deployed app -> the actual app, as in the first two would just lead it to another "sub-domain" being this one, which only got this
+^^^ also emphasizes that "new reality concept"
+
+create the design of this portfolio page
+like in VR when u connect to ur computer
+has the shape of the jaunts
+has like checkered white bottom and top
+pops up the monitor
+make sure everything is optimized
+
+*/
+
