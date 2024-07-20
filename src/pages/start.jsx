@@ -12,11 +12,16 @@ import { Resources } from '../components/StartComponents/Resources';
 export function Start({ setZoomed }) {
   const mountRef = useRef(null);
   useEffect(() => {
-    const renderer = new Renderer().getRenderer();
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000);
+    document.body.appendChild(renderer.domElement);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    
     mountRef.current.appendChild(renderer.domElement);
     const scene = new Scene().getScene();
     const camera = new Camera().getCamera();

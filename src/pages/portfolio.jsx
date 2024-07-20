@@ -5,25 +5,39 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Renderer } from '../components/StartComponents/Renderer';
 import { Scene } from '../components/StartComponents/Scene';
 import { Camera } from '../components/StartComponents/Camera';
+import { Controls } from '../components/StartComponents/Controls';
 
 export function Portfolio() {
-  const mountRef = useRef(null);
-
-  useEffect(() => {
     console.log("on portfolio");
-
+    
     const scene = new Scene().getScene();
-    const renderer = new Renderer().getRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x8b8b8b);
+    document.body.appendChild(renderer.domElement);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     const camera = new Camera().getCamera();
 
     // Camera position
-    camera.position.set(0, 0, 5);
+    camera.position.set(0, 0, 0);
+
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    
+    const controls = new Controls(camera, renderer).getControls();
+    controls.target = new THREE.Vector3(0.5, 2, 0.5);
+    controls.minDistance = 0;
+    controls.maxDistance = 5;
+    controls.minPolarAngle = 0;
+    controls.maxPolarAngle = Math.PI;
 
     // Ground materials
-    const groundGeo = new THREE.PlaneGeometry(20, 20, 32, 32);
+    const groundGeo = new THREE.PlaneGeometry(100, 100, 32, 32);
     groundGeo.rotateX(-Math.PI / 2);
-    const groundMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
+    const groundMaterial = new THREE.MeshBasicMaterial({
+      color: 0xc7c7c7,
       side: THREE.DoubleSide,
     });
 
@@ -31,12 +45,33 @@ export function Portfolio() {
     const groundMesh = new THREE.Mesh(groundGeo, groundMaterial);
     scene.add(groundMesh);
 
-    // Add renderer to DOM
-    mountRef.current.appendChild(renderer.domElement);
+    //grids
+    const bigGrid = new THREE.GridHelper(100,25, 0x898788, 0x000000);
+    const smallerGrid = new THREE.GridHelper(100,200, 0xc7c7c7, 0xbdbdbd);
 
-    // OrbitControls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.update();
+    bigGrid.position.y = 0.001;
+
+
+    const ceilingBigGrid = bigGrid.clone();
+    const ceilingSmallGrid = smallerGrid.clone();
+
+    scene.add(ceilingBigGrid);
+    scene.add(ceilingSmallGrid);
+    scene.add(bigGrid);
+    scene.add(smallerGrid);
+
+    ceilingBigGrid.position.y = 6.999;
+    ceilingSmallGrid.position.y = 7;
+
+    const ceilingMaterial = new THREE.MeshBasicMaterial({
+      color: 0xc7c7c7,
+      side: THREE.DoubleSide,
+    });
+
+    const ceilingMesh = new THREE.Mesh(groundGeo, ceilingMaterial);
+    scene.add(ceilingMesh);
+    ceilingMesh.position.y = 7;
+
 
     function animate() {
       requestAnimationFrame(animate);
@@ -44,46 +79,11 @@ export function Portfolio() {
       renderer.render(scene, camera);
     }
 
+
+
     animate();
-
-    // Cleanup function
-    return () => {
-      // Dispose of geometries, materials, and textures
-      scene.traverse((object) => {
-        if (object.isMesh) {
-          object.geometry.dispose();
-          if (object.material.isMaterial) {
-            cleanMaterial(object.material);
-          } else {
-            // If it's an array of materials
-            for (const material of object.material) cleanMaterial(material);
-          }
-        }
-      });
-
-      // Clean up renderer
-      renderer.dispose();
-
-      // Remove renderer's DOM element
-      if (renderer.domElement.parentNode) {
-        renderer.domElement.parentNode.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
-
-  function cleanMaterial(material) {
-    material.dispose();
-
-    // Dispose of textures
-    for (const key in material) {
-      const value = material[key];
-      if (value && typeof value === 'object' && 'minFilter' in value) {
-        value.dispose();
-      }
-    }
-  }
-
-  return <div ref={mountRef} />;
+    
+  return <div/>;
 }
 
 

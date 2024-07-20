@@ -11,13 +11,13 @@ function App() {
   const [currentPage, setCurrentPage] = useState('start');
 
   useEffect(() => {
-    if (zoomed) {
+    if (zoomed && !transitioned) {
       setCurrentPage('transition');
     }
   }, [zoomed]);
 
   useEffect(() => {
-    if (transitioned) {
+    if (transitioned && zoomed) {
       setCurrentPage('portfolio');
     }
   }, [transitioned]);
@@ -25,16 +25,18 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'start':
+        return <Portfolio />;
         console.log('Rendering Start');
         return <Start setZoomed={setZoomed} />;
       case 'transition':
         console.log('Rendering Transition');
-        return <Transition setTransitioned={setTransitioned} />;
+        return <Transition setTransitioned={setTransitioned}/>;
       case 'portfolio':
         console.log('Rendering Portfolio');
         return <Portfolio />;
       default:
-        return <Start setZoomed={setZoomed} />;
+        return <Portfolio />;
+        // return <Start setZoomed={setZoomed} />;
     }
   };
 

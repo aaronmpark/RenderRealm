@@ -16,4 +16,8 @@ export class Controls {
   getControls() {
     return this.controls;
   }
+
+  setControlMinDistance(controls, min){
+    this.controls.minDistance = min;
+  }
 }
