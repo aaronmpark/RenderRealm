@@ -20,18 +20,18 @@ export function Portfolio() {
     const camera = new Camera().getCamera();
 
     // Camera position
-    camera.position.set(0, 0, 0);
-
+    camera.position.set(0, 1.5, 0);
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
     
     const controls = new Controls(camera, renderer).getControls();
-    controls.target = new THREE.Vector3(0.5, 2, 0.5);
+    controls.target = new THREE.Vector3(0, 1.5, 0);
     controls.minDistance = 0;
-    controls.maxDistance = 5;
+    controls.maxDistance = 0.00001;
     controls.minPolarAngle = 0;
-    controls.maxPolarAngle = Math.PI;
+    controls.maxPolarAngle = Math.PI+2.5;
+
 
     // Ground materials
     const groundGeo = new THREE.PlaneGeometry(100, 100, 32, 32);
@@ -47,7 +47,7 @@ export function Portfolio() {
 
     //grids
     const bigGrid = new THREE.GridHelper(100,25, 0x898788, 0x000000);
-    const smallerGrid = new THREE.GridHelper(100,200, 0xc7c7c7, 0xbdbdbd);
+    const smallerGrid = new THREE.GridHelper(100,200, 0xadadad, 0xadadad);
 
     bigGrid.position.y = 0.001;
 
@@ -72,6 +72,36 @@ export function Portfolio() {
     scene.add(ceilingMesh);
     ceilingMesh.position.y = 7;
 
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    window.addEventListener('resize', onWindowResize, false);
+
+    // use for debugging
+
+  //   function onMouseMove(event) {
+  //     // Normalize mouse coordinates
+  //     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  //     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  //     // Update the raycaster with the camera and mouse position
+  //     raycaster.setFromCamera(mouse, camera);
+
+  //     // Calculate objects intersecting the ray
+  //     const intersects = raycaster.intersectObjects(scene.children, true);
+
+  //     if (intersects.length > 0) {
+  //         const intersect = intersects[0];
+  //         console.log(`Intersection at: ${intersect.point.x}, ${intersect.point.y}, ${intersect.point.z}`);
+  //         // Optionally, display the coordinates in the UI
+  //         // document.getElementById('coordinates').innerText = `X: ${intersect.point.x}, Y: ${intersect.point.y}, Z: ${intersect.point.z}`;
+  //     }
+  // }
+
+  // window.addEventListener('mousemove', onMouseMove, false);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -91,9 +121,8 @@ export function Portfolio() {
 
 /*
 TODO:
-fix the cleanup functions -> maybe turn into another component
 add audio to the pages -> later
-maybe make it so that once u are on the actual portfolio page -> when u refresh, it refreshes to the portfolio page?
+maybe make it so that once u are on the actual portfolio page -> when u refresh, it refreshes to the portfolio page -> set the default to portfolio after somehow? idk about that tbh
 ^^^ can do so by IMO making this page into ANOTHER deployed app -> the actual app, as in the first two would just lead it to another "sub-domain" being this one, which only got this
 ^^^ also emphasizes that "new reality concept"
 
@@ -104,5 +133,8 @@ has like checkered white bottom and top
 pops up the monitor
 make sure everything is optimized
 
+
+add in the vr screen thing
+change the weird glitching in and out somehow
 */
 

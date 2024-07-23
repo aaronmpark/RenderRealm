@@ -36,7 +36,7 @@ function App() {
         return <Portfolio />;
       default:
         return <Portfolio />;
-        // return <Start setZoomed={setZoomed} />;
+        //return <Start setZoomed={setZoomed} />;
     }
   };
 
