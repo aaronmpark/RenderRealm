@@ -7,7 +7,7 @@ import { Scene } from '../components/StartComponents/Scene';
 import { Camera } from '../components/StartComponents/Camera';
 import { Lights } from '../components/StartComponents/Lights';
 import { Controls } from '../components/StartComponents/Controls';
-import { Resources } from '../components/StartComponents/Resources';
+import { Resources } from '../components/StartComponents/StartResources';
 
 export function Start({ setZoomed }) {
   const mountRef = useRef(null);

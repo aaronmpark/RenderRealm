@@ -21,12 +21,12 @@ export class Resources {
     // Screen in the middle of Monitor
     const interGeometry = new THREE.BoxGeometry(1.1, .7, .02);
     const interMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-    this.interactor = new THREE.Mesh(interGeometry, interMaterial);
-    this.interactor.position.set(-.2, 1.9, 0);
-    this.interactor.castShadow = false;
-    this.interactor.receiveShadow = false;
-    this.interactor.visible = false;
-    scene.add(this.interactor);
+    this.MonitorInteractor = new THREE.Mesh(interGeometry, interMaterial);
+    this.MonitorInteractor.position.set(-.2, 1.9, 0);
+    this.MonitorInteractor.castShadow = false;
+    this.MonitorInteractor.receiveShadow = false;
+    this.MonitorInteractor.visible = false;
+    scene.add(this.MonitorInteractor);
 
     // start Button for the Monitor
     const buttonGeometry = new THREE.BoxGeometry(1.1, .7, .02);
@@ -34,6 +34,7 @@ export class Resources {
     this.button.position.set(-.2, 1.9, 0);
     this.button.visible = false;
     scene.add(this.button);
+
   }
   
 
@@ -42,7 +43,7 @@ export class Resources {
     }
 
     getInteractor() {
-      return this.interactor;
+      return this.MonitorInteractor;
     }
 
     getButton() {
