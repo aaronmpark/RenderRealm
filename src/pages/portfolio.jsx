@@ -88,6 +88,8 @@ export function Portfolio() {
     const button2Interactor = vrResources.getVRButton2Interactor();
     const button3Interactor = vrResources.getVRButton3Interactor();
     const button4Interactor = vrResources.getVRButton4Interactor();
+    
+    const panel = vrResources.getPanel();
 
     const onMouseClick = (event) => {
       event.preventDefault();
@@ -122,8 +124,13 @@ export function Portfolio() {
     }
 
     const openPanel = () => {
-      // open Panel
-
+      if (panel.visible == false){
+        panel.visible = true;
+      }
+      else{
+        panel.visible = false;
+      }
+      console.log("PANEL IS OPEN");
     }    
 
     const openSettings = () => {
@@ -131,7 +138,7 @@ export function Portfolio() {
     }
 
     const moveSite = () => {
-      // move to other site
+      // move to other site - create the site that this will go to (last thing?)
       window.open("https://www.google.com", "_blank")
     }
 
@@ -145,7 +152,7 @@ export function Portfolio() {
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('click', onMouseClick, false);
 
-    // use for debugging
+    // use for debugging - see where my mouse is located at on the plane
 
   //   function onMouseMove(event) {
   //     // Normalize mouse coordinates

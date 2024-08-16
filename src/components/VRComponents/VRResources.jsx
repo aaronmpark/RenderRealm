@@ -7,6 +7,7 @@ export class VRResources {
     const buttonGeometry = new THREE.BoxGeometry(.01, .01, .01);
     const interMaterial = new THREE.MeshStandardMaterial({ color: 0x00000 });
 
+    const panelGeometry = new THREE.BoxGeometry(.05,.01,.05);
 
     // Button 1 for VR page
     this.button1Interactor = new THREE.Mesh(buttonGeometry, interMaterial);
@@ -31,6 +32,13 @@ export class VRResources {
     this.button4Interactor.position.set(.1,1.45,-.2);
     this.button4Interactor.rotateX(Math.PI/2+.4);
     scene.add(this.button4Interactor);
+
+    // Control Panel for VR Page
+    this.panel = new THREE.Mesh(panelGeometry, interMaterial);
+    this.panel.position.set(-.075,1.5,-.2);
+    this.panel.rotateX(Math.PI/2);
+    this.panel.visible = false;
+    scene.add(this.panel);
   }
 
     getVRButton1Interactor() {
@@ -44,5 +52,8 @@ export class VRResources {
     }
     getVRButton4Interactor() {
     return this.button4Interactor;
-    } 
+    }
+    getPanel(){
+    return this.panel;
+    }
 }
