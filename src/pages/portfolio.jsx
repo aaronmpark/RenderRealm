@@ -7,6 +7,7 @@ import { Scene } from '../components/StartComponents/Scene';
 import { Camera } from '../components/StartComponents/Camera';
 import { Controls } from '../components/StartComponents/Controls';
 import { VRResources } from '../components/VRComponents/VRResources';
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer';
 
 export function Portfolio() {
     console.log("on portfolio");
@@ -19,6 +20,11 @@ export function Portfolio() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     const camera = new Camera().getCamera();
+
+    // Look at this later -> will change later ? (light so that colors can exist)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(ambientLight);
+
 
     // Camera position
     camera.position.set(0, 1.5, 0);
@@ -61,8 +67,8 @@ export function Portfolio() {
     scene.add(bigGrid);
     scene.add(smallerGrid);
 
-    ceilingBigGrid.position.y = 6.999;
-    ceilingSmallGrid.position.y = 7;
+    ceilingBigGrid.position.y = 14.999;
+    ceilingSmallGrid.position.y = 15;
 
     const ceilingMaterial = new THREE.MeshBasicMaterial({
       color: 0xc7c7c7,
@@ -71,7 +77,7 @@ export function Portfolio() {
 
     const ceilingMesh = new THREE.Mesh(groundGeo, ceilingMaterial);
     scene.add(ceilingMesh);
-    ceilingMesh.position.y = 7;
+    ceilingMesh.position.y = 15;
 
 
 
@@ -91,6 +97,14 @@ export function Portfolio() {
     
     const panel = vrResources.getPanel();
 
+    const app1 = vrResources.getApp1();
+    const app2 = vrResources.getApp2();
+    const app3 = vrResources.getApp3();
+
+    app1.visible = false;
+    app2.visible = false;
+    app3.visible = false;
+
     const onMouseClick = (event) => {
       event.preventDefault();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -100,6 +114,7 @@ export function Portfolio() {
       const b2Intersects = raycaster.intersectObjects([button2Interactor]);
       const b3Intersects = raycaster.intersectObjects([button3Interactor]);
       const b4Intersects = raycaster.intersectObjects([button4Interactor]);
+      const app1Intersects = raycaster.intersectObjects([app1]);
 
       if (b1Intersects.length > 0) {
         resetPage();
@@ -117,6 +132,11 @@ export function Portfolio() {
         moveSite();
         console.log('Moving to other site...');
       }
+
+      if (app1Intersects.length > 0){
+        openPortfolio();
+        console.log("Opening portfolio...");
+      }
     };
 
     const resetPage = () => {
@@ -126,9 +146,15 @@ export function Portfolio() {
     const openPanel = () => {
       if (panel.visible == false){
         panel.visible = true;
+        app1.visible = true;
+        app2.visible = true;
+        app3.visible = true;
       }
       else{
         panel.visible = false;
+        app1.visible = false;
+        app2.visible = false;
+        app3.visible = false;
       }
       console.log("PANEL IS OPEN");
     }    
@@ -142,6 +168,9 @@ export function Portfolio() {
       window.open("https://www.google.com", "_blank")
     }
 
+    const openPortfolio = () => {
+      // Open another thing that will just open a website on the page?
+    }
 
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
