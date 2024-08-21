@@ -21,6 +21,14 @@ export function Portfolio() {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     const camera = new Camera().getCamera();
 
+    // Set up CSS3DRenderer
+    const cssRenderer = new CSS3DRenderer();
+    cssRenderer.setSize(window.innerWidth, window.innerHeight);
+    cssRenderer.domElement.style.position = 'absolute';
+    cssRenderer.domElement.style.top = 0;
+    cssRenderer.domElement.style.pointerEvents = 'none';
+    document.body.appendChild(cssRenderer.domElement);
+
     // Look at this later -> will change later ? (light so that colors can exist)
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
@@ -79,7 +87,17 @@ export function Portfolio() {
     scene.add(ceilingMesh);
     ceilingMesh.position.y = 15;
 
+    // Embedding a YouTube video using CSS3DObject
+    const iframe = document.createElement('iframe');
+    iframe.src = 'http://localhost:5173/';  // Replace with the actual site URL
+    iframe.style.width = '640px';
+    iframe.style.height = '360px';
+    iframe.style.border = '0';
 
+    const cssObject = new CSS3DObject(iframe);
+    cssObject.position.set(0,1.515,-.19);  
+    cssObject.scale.set(0.0001, 0.0001, 0.0001);  
+    scene.add(cssObject);
 
 
 
@@ -176,38 +194,20 @@ export function Portfolio() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      cssRenderer.setSize(window.innerWidth, window.innerHeight);
     }
 
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('click', onMouseClick, false);
 
-    // use for debugging - see where my mouse is located at on the plane
-
-  //   function onMouseMove(event) {
-  //     // Normalize mouse coordinates
-  //     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  //     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  //     // Update the raycaster with the camera and mouse position
-  //     raycaster.setFromCamera(mouse, camera);
-
-  //     // Calculate objects intersecting the ray
-  //     const intersects = raycaster.intersectObjects(scene.children, true);
-
-  //     if (intersects.length > 0) {
-  //         const intersect = intersects[0];
-  //         console.log(`Intersection at: ${intersect.point.x}, ${intersect.point.y}, ${intersect.point.z}`);
-  //         // Optionally, display the coordinates in the UI
-  //         // document.getElementById('coordinates').innerText = `X: ${intersect.point.x}, Y: ${intersect.point.y}, Z: ${intersect.point.z}`;
-  //     }
-  // }
-
-  // window.addEventListener('mousemove', onMouseMove, false);
 
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
       renderer.render(scene, camera);
+      cssRenderer.render(scene, camera);
+
+      
     }
 
 
@@ -234,30 +234,6 @@ has like checkered white bottom and top
 pops up the monitor
 make sure everything is optimized
 
-IDEA:
-- have a floating taskbar (moves around with the camera ( with a slight delay))
-- each button on the taskbar will be like [Home, About, Projects, Resume, Etc. (maybe also a like pop-out for the basic website)]
-- when any of the buttons are pressed (except the pop-out), show a screen that comes above the taskbar (like in VR)
-- the screen will just be something basic like a semi-website within the website
-- OR the inside website will just be the OG basic resume pages (just popped out in VR for that effect?)
-
-
-IDEA2:
-- taskbar -> reset, show control panel of apps, settings, button to go to basic portfolio
-- control panel -> has apps of like games, PORTFOLIO APP, etc.
-- when clikc on any of em, changes what the big box thing displays
-- if portfolio, displays my basic portfolio website (make later)
-
-taskbar
-- [Reset, Pop 2nd control panel, Settings (maybe add like to change environment stuff), Base Portfolio Button]
-- 4 buttons 
-
-
 maybe remove the top ceiling one (experiment later)
-
-
-
-add in the vr screen thing
-change the weird glitching in and out somehow
 */
 
