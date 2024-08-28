@@ -21,7 +21,7 @@ export function Start({ setZoomed }) {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
+
     mountRef.current.appendChild(renderer.domElement);
     const scene = new Scene().getScene();
     const camera = new Camera().getCamera();
@@ -207,3 +207,5 @@ export function Start({ setZoomed }) {
 
   return <div ref={mountRef} />;
 }
+
+// animations on the hovering over the screen -> LAST TO DO + audio
