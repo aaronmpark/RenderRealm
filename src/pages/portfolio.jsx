@@ -47,6 +47,13 @@ export function Portfolio() {
     controls.minPolarAngle = 0;
     controls.maxPolarAngle = Math.PI+2.5;
 
+    // const controls2 = new Controls(camera, cssRenderer).getControls();
+    // controls2.target = new THREE.Vector3(0, 1.5, 0);
+    // controls2.minDistance = 0;
+    // controls2.maxDistance = 0.00001;
+    // controls2.minPolarAngle = 0;
+    // controls2.maxPolarAngle = Math.PI+2.5;
+
 
     // Ground materials
     const groundGeo = new THREE.PlaneGeometry(200, 200, 32, 32);
@@ -235,5 +242,12 @@ pops up the monitor
 make sure everything is optimized
 
 maybe remove the top ceiling one (experiment later)
+
+the embed moves weird with the camera
+^^^ try to figure out how it can work with the controls but idk if it can
+bcus its kinda like its a static embed image that exists, but the camera controls updates the page perma.
+so it kinda just stays in the middle cuz its like just website in the middle
+so idk how it can move too
+
 */
 
