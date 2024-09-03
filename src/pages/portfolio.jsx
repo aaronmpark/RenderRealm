@@ -9,7 +9,7 @@ import { Controls } from '../components/StartComponents/Controls';
 import { VRResources } from '../components/VRComponents/VRResources';
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer';
 
-export function Portfolio({ setGame }) {
+export function Portfolio({ setGame, setAbout }) {
   useEffect(() => {
 
     console.log("on portfolio");
@@ -169,10 +169,13 @@ export function Portfolio({ setGame }) {
 
     const openPortfolio = () => {
       // Open another thing that will just open a website on the page?
+      setAbout(true);
+      // write here to also reset the other page to save space
     }
 
     const generateGame = () => {
       setGame(true);
+      // write here to also reset the other page to save space
     }
 
     function onWindowResize() {
@@ -193,7 +196,7 @@ export function Portfolio({ setGame }) {
     }
 
     animate();
-  }, [setGame]);
+  }, [setGame, setAbout]);
   return <div />;
 }
 
