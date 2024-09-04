@@ -92,6 +92,7 @@ export function Portfolio({ setGame, setAbout }) {
     const button3Interactor = vrResources.getVRButton3Interactor();
     const button4Interactor = vrResources.getVRButton4Interactor();
 
+    const settingsMenu = vrResources.getsettingsMenu();
     const panel = vrResources.getPanel();
 
     const app1 = vrResources.getApp1();
@@ -141,7 +142,11 @@ export function Portfolio({ setGame, setAbout }) {
     };
 
     const resetPage = () => {
-      // do stuff [implement last cuz needs the other stuff to be made first]
+      if (panel.visible == true){
+        panel.visible = false;
+        app1.visible = false;
+        app2.visible = false;
+      }
     }
 
     const openPanel = () => {
@@ -160,6 +165,12 @@ export function Portfolio({ setGame, setAbout }) {
 
     const openSettings = () => {
       // create settings menu (or just call it from a diff component is what i mean)
+      if (settingsMenu.visible == false){
+        settingsMenu.visible = true;
+      }
+      else{
+        settingsMenu.visible = false;
+      }
     }
 
     const moveSite = () => {

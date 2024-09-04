@@ -44,6 +44,13 @@ export class VRResources {
     this.panel.visible = false;
     scene.add(this.panel);
 
+    // Settings Menu for VR Page
+    this.settingsMenu = new THREE.Mesh(panelGeometry, interMaterial);
+    this.settingsMenu.position.set(0, 1.51, -.12);
+    this.settingsMenu.rotateX(Math.PI/2);
+    this.settingsMenu.visible = false;
+    scene.add(this.settingsMenu);
+
     // App 1
     this.app1 = new THREE.Mesh(appGeometry, appMaterial);
     this.app1.position.set(-.07, 1.515, -.19);
@@ -77,5 +84,8 @@ export class VRResources {
   }
   getApp2() {
     return this.app2;
+  }
+  getsettingsMenu() {
+    return this.settingsMenu;
   }
 }
