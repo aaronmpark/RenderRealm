@@ -14,7 +14,7 @@ export function AboutMe() {
         renderer.setSize(window.innerWidth, window.innerHeight);
         mountRef.current.appendChild(renderer.domElement);
 
-        // Create a green plane
+        // Create a orange plane
         const planeGeometry = new THREE.PlaneGeometry(10, 10);
         const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xFF7F00, side: THREE.DoubleSide });
         const plane = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -56,3 +56,15 @@ export function AboutMe() {
 
     return <div ref={mountRef} />;
 }
+
+
+// maybe like a 2d side-scroller that just as u go through things shows stuff about me...
+// like first thing is hello!
+// my name is Aaron Park!
+// I am a ....
+// I like ...
+// Here are some projects!
+// display projects
+// at the end have like stuff i just like to do
+// but allow them to move fast
+// and also have a tp section on the side

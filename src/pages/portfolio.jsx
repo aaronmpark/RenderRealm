@@ -142,10 +142,14 @@ export function Portfolio({ setGame, setAbout }) {
     };
 
     const resetPage = () => {
-      if (panel.visible == true){
+      if (panel.visible == true) {
         panel.visible = false;
         app1.visible = false;
         app2.visible = false;
+      }
+
+      if (settingsMenu.visible == true) {
+        settingsMenu.visible = false;
       }
     }
 
@@ -165,10 +169,10 @@ export function Portfolio({ setGame, setAbout }) {
 
     const openSettings = () => {
       // create settings menu (or just call it from a diff component is what i mean)
-      if (settingsMenu.visible == false){
+      if (settingsMenu.visible == false) {
         settingsMenu.visible = true;
       }
-      else{
+      else {
         settingsMenu.visible = false;
       }
     }
