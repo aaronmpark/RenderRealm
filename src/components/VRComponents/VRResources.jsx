@@ -59,7 +59,7 @@ export class VRResources {
 
     // App 2
     this.app2 = new THREE.Mesh(appGeometry, appMaterial);
-    this.app2.position.set(.07, 1.515, -.19);
+    this.app2.position.set(0, 1.515, -.19);
     this.app2.rotateX(Math.PI / 2);
     scene.add(this.app2);
   }

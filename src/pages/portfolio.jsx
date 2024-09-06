@@ -156,8 +156,8 @@ export function Portfolio({ setGame, setAbout }) {
     const openPanel = () => {
       if (panel.visible == false) {
         panel.visible = true;
-        app1.visible = true;
-        app2.visible = true;
+        //app1.visible = true; // maybe change this to actually exist LATER ON... but for RN just gonna keep it to not exist.        
+        app2.visible = true; 
       }
       else {
         panel.visible = false;
