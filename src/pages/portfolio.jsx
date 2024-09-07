@@ -7,7 +7,6 @@ import { Scene } from '../components/StartComponents/Scene';
 import { Camera } from '../components/StartComponents/Camera';
 import { Controls } from '../components/StartComponents/Controls';
 import { VRResources } from '../components/VRComponents/VRResources';
-import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer';
 
 export function Portfolio({ setGame, setAbout }) {
   useEffect(() => {
@@ -202,7 +201,6 @@ export function Portfolio({ setGame, setAbout }) {
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('click', onMouseClick, false);
 
-
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
@@ -211,6 +209,43 @@ export function Portfolio({ setGame, setAbout }) {
     }
 
     animate();
+    return () => {
+      window.removeEventListener('click', onMouseClick);
+      window.removeEventListener('resize', onWindowResize);
+      // Dispose of geometries, materials, and textures
+      scene.traverse((object) => {
+        if (object.isMesh) {
+          object.geometry.dispose();
+          if (object.material.isMaterial) {
+            cleanMaterial(object.material);
+          } else {
+            // If it's an array of materials
+            for (const material of object.material) cleanMaterial(material);
+          }
+        }
+      });
+
+      // Clean up renderer
+      renderer.dispose();
+
+      // Remove renderer's DOM element
+      if (renderer.domElement.parentNode) {
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
+    };
+
+    function cleanMaterial(material) {
+      material.dispose();
+
+      // Dispose of textures
+      for (const key in material) {
+        const value = material[key];
+        if (value && typeof value === 'object' && 'minFilter' in value) {
+          value.dispose();
+        }
+      }
+    }
+
   }, [setGame, setAbout]);
   return <div />;
 }

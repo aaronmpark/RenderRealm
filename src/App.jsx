@@ -41,7 +41,7 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'start':
-        return <Portfolio setGame={setGame} setAbout={setAbout}/>;
+        //return <Portfolio setGame={setGame} setAbout={setAbout}/>;
         console.log('Rendering Start');
         return <Start setZoomed={setZoomed} />;
       case 'transition':
@@ -57,8 +57,8 @@ function App() {
         console.log("Rendering About Me Page");
         return <AboutMe />
       default:
-        return <Portfolio setGame={setGame} setAbout={setAbout} />;
-        return <Start setZoomed={setZoomed} />;
+        //return <Portfolio setGame={setGame} setAbout={setAbout} />;
+        //return <Start setZoomed={setZoomed} />;
     }
   };
 
