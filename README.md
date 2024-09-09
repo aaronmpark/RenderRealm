@@ -1,8 +1,5 @@
-# React + Vite
+# RenderRealm - A 3D Environment Created with Three.js
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![image](https://github.com/user-attachments/assets/beba5afe-0c06-4e57-baf2-75389b5fe2ad)
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![image](https://github.com/user-attachments/assets/2a5245bb-e7b2-4ff0-bdc9-a98ac8afc55f)
