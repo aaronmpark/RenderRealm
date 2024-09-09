@@ -41,6 +41,7 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'start':
+        return <Game />
         //return <Portfolio setGame={setGame} setAbout={setAbout}/>;
         console.log('Rendering Start');
         return <Start setZoomed={setZoomed} />;
@@ -49,7 +50,7 @@ function App() {
         return <Transition setTransitioned={setTransitioned} />;
       case 'portfolio':
         console.log('Rendering Portfolio');
-        return <Portfolio setGame={setGame} setAbout={setAbout}/>;
+        return <Portfolio setGame={setGame} setAbout={setAbout} />;
       case 'game':
         console.log("Rendering VR Game");
         return <Game />;
@@ -57,8 +58,8 @@ function App() {
         console.log("Rendering About Me Page");
         return <AboutMe />
       default:
-        //return <Portfolio setGame={setGame} setAbout={setAbout} />;
-        //return <Start setZoomed={setZoomed} />;
+      //return <Portfolio setGame={setGame} setAbout={setAbout} />;
+      //return <Start setZoomed={setZoomed} />;
     }
   };
 
