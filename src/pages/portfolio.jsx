@@ -79,9 +79,7 @@ export function Portfolio({ setGame, setAbout }) {
     scene.add(ceilingMesh);
     ceilingMesh.position.y = 15;
 
-    //CODE FOR INITIAL TASKBAR pt 1
-    // [import a taskbar thing i can create model with certain things]
-    // 4 buttons that will call 4 different functions
+    // CODE FOR IMPORTING ICONS
 
     const vrResources = new VRResources(scene);
 
@@ -94,10 +92,10 @@ export function Portfolio({ setGame, setAbout }) {
     const settingsMenu = vrResources.getsettingsMenu();
     const panel = vrResources.getPanel();
 
-    const app1 = vrResources.getApp1();
+    // const app1 = vrResources.getApp1();
     const app2 = vrResources.getApp2();
 
-    app1.visible = false;
+    //app1.visible = false;
     app2.visible = false;
 
     const onMouseClick = (event) => {
@@ -109,7 +107,7 @@ export function Portfolio({ setGame, setAbout }) {
       const b2Intersects = raycaster.intersectObjects([button2Interactor]);
       const b3Intersects = raycaster.intersectObjects([button3Interactor]);
       const b4Intersects = raycaster.intersectObjects([button4Interactor]);
-      const app1Intersects = raycaster.intersectObjects([app1]);
+      // const app1Intersects = raycaster.intersectObjects([app1]);
       const app2Intersects = raycaster.intersectObjects([app2]);
 
 
@@ -130,10 +128,10 @@ export function Portfolio({ setGame, setAbout }) {
         console.log('Moving to other site...');
       }
 
-      if (app1Intersects.length > 0 && panel.visible == true) {
-        openPortfolio();
-        console.log("Opening portfolio...");
-      }
+      // if (app1Intersects.length > 0 && panel.visible == true) {
+      //   openPortfolio();
+      //   console.log("Opening portfolio...");
+      // }
       if (app2Intersects.length > 0 && panel.visible == true) {
         generateGame();
         console.log("Generating Game...");
@@ -143,7 +141,7 @@ export function Portfolio({ setGame, setAbout }) {
     const resetPage = () => {
       if (panel.visible == true) {
         panel.visible = false;
-        app1.visible = false;
+        //app1.visible = false;
         app2.visible = false;
       }
 
@@ -160,7 +158,7 @@ export function Portfolio({ setGame, setAbout }) {
       }
       else {
         panel.visible = false;
-        app1.visible = false;
+        //app1.visible = false;
         app2.visible = false;
       }
       console.log("PANEL IS OPEN");
@@ -178,7 +176,7 @@ export function Portfolio({ setGame, setAbout }) {
 
     const moveSite = () => {
       // move to other site - create the site that this will go to (last thing?)
-      window.open("https://www.google.com", "_blank")
+      window.open("https://github.com/aaronmpark", "_blank")
     }
 
     const openPortfolio = () => {
@@ -249,31 +247,3 @@ export function Portfolio({ setGame, setAbout }) {
   }, [setGame, setAbout]);
   return <div />;
 }
-
-
-
-
-/*
-TODO:
-add audio to the pages -> later
-maybe make it so that once u are on the actual portfolio page -> when u refresh, it refreshes to the portfolio page -> set the default to portfolio after somehow? idk about that tbh
-^^^ can do so by IMO making this page into ANOTHER deployed app -> the actual app, as in the first two would just lead it to another "sub-domain" being this one, which only got this
-^^^ also emphasizes that "new reality concept"
-
-create the design of this portfolio page
-like in VR when u connect to ur computer
-has the shape of the jaunts
-has like checkered white bottom and top
-pops up the monitor
-make sure everything is optimized
-
-maybe remove the top ceiling one (experiment later)
-
-the embed moves weird with the camera
-^^^ try to figure out how it can work with the controls but idk if it can
-bcus its kinda like its a static embed image that exists, but the camera controls updates the page perma.
-so it kinda just stays in the middle cuz its like just website in the middle
-so idk how it can move too
-
-*/
-
